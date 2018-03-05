@@ -3,11 +3,49 @@
     <head>
         <meta charset="UTF-8" />
         <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        {% block stylesheets %}
+            <!-- Latest compiled and minified CSS -->
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+            <!-- Optional theme -->
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+            <!-- Custom CSS -->
+            <link rel="stylesheet" href="{{ asset('css/base.css') }}">
+        {% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
     <body>
-        {% block body %}{% endblock %}
+
+        {% block body %}
+
+        <div class="container">
+            <div class="header clearfix">
+                <nav>
+                    {% block menu %}
+                    <ul class="nav nav-pills pull-right">
+                        <li role="presentation" class="active"><a href="{{ path('list_product') }}">Product List</a></li>
+                        <li role="presentation"><a href="{{ path('cart_summary') }}">Cart Summary</a></li>
+                    </ul>
+                    {% endblock %}
+                </nav>
+                {% block logo %}
+                <h3 class="text-muted">Dev Exo</h3>
+                {% endblock %}
+            </div>
+
+            {% block container %}
+
+            {% endblock %}
+
+            <footer class="footer">
+                <p>&copy; 2018 by Djerson Clément.</p>
+            </footer>
+
+        </div> <!-- /container -->
+
+        {% endblock %}
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
         {% block javascripts %}{% endblock %}
     </body>
 </html>

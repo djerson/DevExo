@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Cart Summary
+{% endblock %}
+
+{% block menu %}
+    <ul class="nav nav-pills pull-right">
+        <li role="presentation">
+            <a href="{{ path('list_product') }}">
+                Product List
+            </a>
+        </li>
+        <li role="presentation" class="active">
+            <a href="{{ path('cart_summary') }}">
+                Cart Summary
+            </a>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block container %}
+    <table class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">First</th>
+            <th scope="col">Last</th>
+            <th scope="col">Handle</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th scope="row">1</th>
+            <td>Mark</td>
+            <td>Otto</td>
+            <td>@mdo</td>
+        </tr>
+        <tr>
+            <th scope="row">2</th>
+            <td>Jacob</td>
+            <td>Thornton</td>
+            <td>@fat</td>
+        </tr>
+        <tr>
+            <th scope="row">3</th>
+            <td>Larry</td>
+            <td>the Bird</td>
+            <td>@twitter</td>
+        </tr>
+        </tbody>
+    </table>
+
+{% endblock %}
