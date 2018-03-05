@@ -21,16 +21,17 @@
 
 {% block container %}
     <div class="row marketing">
-        {% for i in 0..5 %}
+        {% for prod in products %}
             <div class="col-lg-4 product">
                 <div class="row">
                     <div class="product-img">
-                        <img src="{{ asset('img/bag.jpg') }}" alt="image product" width="200">
+                        <img src="{{ asset('img/'~ prod.name | lower ~'.jpg') }}" alt="image product" width="200" height="200">
                     </div>
                     <div class="col-lg-12">
-                        <h4><strong>Product name</strong></h4>
-                        <p>Price : </p>
-                        <p>Weight : </p>
+                        <h4><strong>{{ prod.name }}</strong></h4>
+                        <p>Price : {{ prod.price }}</p>
+                        <p>Weight : {{ prod.weight }}</p>
+                        <p>Date : {{ prod.date|date('d/m/Y') }}</p>
                     </div>
                     <button class="btn btn-block btn-primary">
                         <i class="fa fa-cart-plus"></i>
