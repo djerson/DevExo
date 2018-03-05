@@ -53,7 +53,8 @@ body {
 
 /* Supporting marketing content */
 .marketing {
-    margin: 40px 0;
+    margin: 40px;
+
 }
 .marketing p + h4 {
     margin-top: 28px;
@@ -76,4 +77,26 @@ body {
     .jumbotron {
         border-bottom: 0;
     }
+}
+.container{
+    padding: 0 !important;
+}
+
+.product{
+    background-color: #dfdfdf;
+    margin: 5px;
+    width: 200px;
+    border-radius: 2px;
+}
+
+.qtt-prod{
+    width: 80px;
+}
+
+.total tr td{
+    padding: 10px;
+}
+
+.btn{
+    border-radius: 0 !important;
 }

@@ -20,35 +20,77 @@
 {% endblock %}
 
 {% block container %}
+    <div class="col-lg-4">
+        <label>Shipping region : </label>
+        <select>
+            <option>Mauritius</option>
+            <option>Rodrigues</option>
+        </select>
+    </div>
     <table class="table">
         <thead class="thead-dark">
         <tr>
-            <th scope="col">#</th>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col">Handle</th>
+            <th width="5%">Item</th>
+            <th width="50%">Name</th>
+            <th width="15%">Price</th>
+            <th width="5%">Quantity</th>
+            <th width="20%">Total</th>
+            <th width="5%"></th>
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-        </tr>
-        <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-        </tr>
-        <tr>
-            <th scope="row">3</th>
-            <td>Larry</td>
-            <td>the Bird</td>
-            <td>@twitter</td>
-        </tr>
+        {% for i in 0..5 %}
+            <tr>
+                <th>
+                    <img src="{{ asset('img/bag.jpg') }}" width="40">
+                </th>
+                <td>
+                    Product name
+                </td>
+                <td>
+                    Mur. 1200
+                </td>
+                <td>
+                    <input type="number" value="5" class="form-control qtt-prod" min="1">
+                </td>
+                <td>
+                    Mur. 12,500.00
+                </td>
+                <td>
+                    <button class="btn btn-link">
+                        <i class="fa fa-times text-danger"></i>
+                    </button>
+                </td>
+            </tr>
+
+        {% endfor %}
         </tbody>
     </table>
+    <div class="summary-total">
+        <table class="total">
+            <tr>
+                <td width="50%"></td>
+                <td width="27%" align="right" class="text-muted">Sub Total : </td>
+                <td align="left"><strong>Mur. 1,020,500.00</strong></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td align="right" class="text-muted">Shipping Charge : </td>
+                <td align="left" class="text-muted">Mur. 12,500.00</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td align="right"><strong>Total Amount : </strong></td>
+                <td align="left" class="text-success"><h4>Mur. 1,020,500.00</h4></td>
+            </tr>
+        </table>
+    </div>
+    <div class="row pull-right">
+        <button class="btn btn-default ">Continue shopping</button>
+        <button class="btn btn-primary">Order</button>
+    </div>
+    <br>
+    <br>
+    <br>
 
 {% endblock %}
