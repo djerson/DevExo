@@ -22,9 +22,9 @@
 {% block container %}
     <div class="col-lg-4">
         <label>Shipping region : </label>
-        <select>
-            <option>Mauritius</option>
-            <option>Rodrigues</option>
+        <select id="list_regions">
+            <option value="1">Mauritius</option>
+            <option value="2">Rodrigues</option>
         </select>
     </div>
     <table class="table">
@@ -39,58 +39,190 @@
         </tr>
         </thead>
         <tbody>
-        {% for i in 0..5 %}
+        {% if(empty_cart == false) %}
+            {% for prod in products %}
             <tr>
                 <th>
-                    <img src="{{ asset('img/bag.jpg') }}" width="40">
+                    <img src="{{ asset('img/'~ prod.name | lower ~'.jpg') }}" width="40">
                 </th>
                 <td>
-                    Product name
+                    {{ prod.name }}
                 </td>
                 <td>
-                    Mur. 1200
+                    Mur. <span id="price-prod-{{ prod.id }}">{{ prod.price }}</span>
                 </td>
                 <td>
-                    <input type="number" value="5" class="form-control qtt-prod" min="1">
+                    <input type="number"  id="qtty-prod-{{ prod.id }}" value="{{ prod.qtty }}" class="form-control qtt-prod" min="1">
                 </td>
                 <td>
-                    Mur. 12,500.00
+                    Mur. <span  id="total-prod-{{ prod.id }}" class="total-prod">{{ prod.total }}</span>
                 </td>
                 <td>
-                    <button class="btn btn-link">
+                    <a class="btn btn-link" href="{{ path('delete_from_cart') }}/{{ prod.id }}">
                         <i class="fa fa-times text-danger"></i>
-                    </button>
+                    </a>
                 </td>
             </tr>
 
-        {% endfor %}
+            {% endfor %}
+        {% else %}
+            <tr>
+             <td align="center" colspan="6">No product in your cart</td>
+            </tr>
+        {% endif %}
         </tbody>
     </table>
     <div class="summary-total">
         <table class="total">
             <tr>
-                <td width="50%"></td>
-                <td width="27%" align="right" class="text-muted">Sub Total : </td>
-                <td align="left"><strong>Mur. 1,020,500.00</strong></td>
+                <td width="400px"></td>
+                <td width="150px" align="right" class="text-muted">Sub Total : </td>
+                <td width="150px" align="left">
+                    <strong>Mur.
+                        <span id="sub-total">
+                            {% if(empty_cart == false) %}
+                                {{ sub_total }}
+                            {% else %}
+                                0
+                            {% endif %}
+                        </span>
+                    </strong>
+                </td>
             </tr>
             <tr>
                 <td></td>
                 <td align="right" class="text-muted">Shipping Charge : </td>
-                <td align="left" class="text-muted">Mur. 12,500.00</td>
+                <td align="left" class="text-muted">
+                    Mur.
+                    <span id="shipping-charge"> {% if(empty_cart == false) %}{{ shipping_charge }}{% else %}0{% endif %}</span>
+                </td>
             </tr>
             <tr>
                 <td></td>
                 <td align="right"><strong>Total Amount : </strong></td>
-                <td align="left" class="text-success"><h4>Mur. 1,020,500.00</h4></td>
+                <td align="left" class="text-success">
+                    {% if(empty_cart == false) %}
+                        <h4>Mur. <span id="real-total">{{ shipping_charge+sub_total }}</span></h4>
+                    {% else %}
+                        <h4>Mur. 0</h4>
+                    {% endif %}
+                </td>
             </tr>
         </table>
     </div>
     <div class="row pull-right">
-        <button class="btn btn-default ">Continue shopping</button>
-        <button class="btn btn-primary">Order</button>
+        <a class="btn btn-default " href="{{ path('list_product') }}">Continue shopping</a>
+        <button class="btn btn-primary" {% if(empty_cart == true) %} disabled {% endif %} id="order">Order</button>
     </div>
     <br>
     <br>
     <br>
 
+{% endblock %}
+
+{% block javascripts %}
+    <script type="application/javascript">
+        $(document).ready(function () {
+
+            function getAllRegion(){
+
+                $.ajax({
+                    url: "{{ path('all_region') }}",
+                    method: "GET",
+                    success: function(regions) {
+                        var reg_tag = "";
+                        for(var i=0 ; i< regions.length; i++)
+                        {
+                            reg_tag += '<option value="'+regions[i].id+'">';
+                            reg_tag += regions[i].name;
+                            reg_tag += '</option>';
+                        }
+                        $('#list_regions').html(reg_tag);
+                    }
+                });
+            }
+            function getCartProduct(){
+
+                $.ajax({
+                    url: "{{ path('get_cart_products') }}",
+                    method: "GET",
+                    success: function(prods) {
+
+                        for(var i=0; i< prods.length; i++)
+                        {
+
+                        }
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+            }
+
+            function showShippingCharge(DATA) {
+                $.ajax({
+                    url: "{{ path('show_shipping_charge') }}",
+                    method: "POST",
+                    data: {
+                        "id_region" : $('#list_regions').val(),
+                        "prods" : DATA
+                    },
+                    success: function(data) {
+                        $('#shipping-charge').text(data.ship_price);
+                        var ship = parseFloat($('#shipping-charge').text());
+                        var sub =  parseFloat($('#sub-total').text());
+                        $('#real-total').text(sub+ship);
+
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+            }
+
+            function show_total_per_prod(subject) {
+                var tag_id = subject.id;
+                var id_prod = tag_id.split("-")[2];
+                var price = $("#price-prod-"+id_prod).text();
+                var qtty = $("#qtty-prod-"+id_prod).val();
+                $("#total-prod-"+id_prod).text(price*qtty);
+                var sub_tot = 0;
+                $('.total-prod').each(function()
+                {
+                    sub_tot = sub_tot + parseFloat($(this).text());
+                });
+                $('#sub-total').text(sub_tot);
+
+                var post_data = new Array();
+                $('.qtt-prod').each(function()
+                {
+                    var id_p = $(this)[0].id.split("-")[2];
+                    var qt = $("#qtty-prod-"+id_p).val();
+                    post_data.push({id:id_p,qtty:qt});
+                });
+                showShippingCharge(post_data);
+            }
+
+            getAllRegion();
+
+            $('.qtt-prod').change(function () {
+                show_total_per_prod($(this)[0]);
+            });
+
+            $('#list_regions').change(function(){
+                var post_data = new Array();
+                $('.qtt-prod').each(function()
+                {
+                    var id_p = $(this)[0].id.split("-")[2];
+                    var qt = $("#qtty-prod-"+id_p).val();
+                    post_data.push({id:id_p,qtty:qt});
+                });
+                showShippingCharge(post_data);
+            });
+
+            $('#order').click(function () {
+               alert("UNDER CONSTRUCTION");
+            });
+        })
+    </script>
 {% endblock %}

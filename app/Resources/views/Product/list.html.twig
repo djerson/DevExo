@@ -22,23 +22,26 @@
 {% block container %}
     <div class="row marketing">
         {% for prod in products %}
-            <div class="col-lg-4 product">
-                <div class="row">
-                    <div class="product-img">
-                        <img src="{{ asset('img/'~ prod.name | lower ~'.jpg') }}" alt="image product" width="200" height="200">
+            <form method="POST" action="{{ path('add_to_cart') }}">
+                <div class="col-lg-4 product">
+                    <div class="row">
+                        <div class="product-img">
+                            <img src="{{ asset('img/'~ prod.name | lower ~'.jpg') }}" alt="image product" width="200" height="200">
+                        </div>
+                        <div class="col-lg-12">
+                            <input type="hidden" name="id_prod" value="{{ prod.id }}">
+                            <h4><strong>{{ prod.name }}</strong></h4>
+                            <p>Price : {{ prod.price }}</p>
+                            <p>Weight : {{ prod.weight }}</p>
+                            <p>Date : {{ prod.date|date('d/m/Y') }}</p>
+                        </div>
+                        <button type="submit" name="addtocart" class="btn btn-block btn-primary">
+                            <i class="fa fa-cart-plus"></i>
+                            Add to cart
+                        </button>
                     </div>
-                    <div class="col-lg-12">
-                        <h4><strong>{{ prod.name }}</strong></h4>
-                        <p>Price : {{ prod.price }}</p>
-                        <p>Weight : {{ prod.weight }}</p>
-                        <p>Date : {{ prod.date|date('d/m/Y') }}</p>
-                    </div>
-                    <button class="btn btn-block btn-primary">
-                        <i class="fa fa-cart-plus"></i>
-                        Add to cart
-                    </button>
                 </div>
-            </div>
+            </form>
         {% endfor %}
     </div>
 {% endblock %}
